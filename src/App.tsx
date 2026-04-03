@@ -333,37 +333,59 @@ function Dashboard({ data, movingItems, onCompleteMove, onSelectLocation, onOpen
       </header>
 
       {movingItems.length > 0 && (
-        <div className="bg-orange-50 p-6 rounded-3xl border border-orange-100 space-y-4">
+        <div className="bg-orange-50 p-6 rounded-3xl border border-orange-100 space-y-6">
           <div className="flex items-center gap-2 text-orange-600">
             <ArrowRightLeft size={20} />
             <h2 className="font-bold uppercase tracking-widest text-sm">To Take Next Time</h2>
           </div>
-          <div className="space-y-3">
-            {movingItems.map((item) => (
-              <div key={item.id} className="bg-white p-3 rounded-2xl shadow-sm flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <div className="w-10 h-10 rounded-xl bg-gray-50 flex overflow-hidden flex-shrink-0">
-                    {item.image ? (
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xl">
-                        {CATEGORIES.find(c => c.value === item.category)?.icon}
-                      </div>
-                    )}
+          
+          <div className="space-y-6">
+            {data.map(loc => {
+              const locMovingItems = movingItems.filter(i => i.locationId === loc.id);
+              if (locMovingItems.length === 0) return null;
+              const otherLoc = data.find(l => l.id !== loc.id);
+
+              return (
+                <div key={loc.id} className="space-y-3">
+                  <div className="flex items-center gap-2 px-1">
+                    <p className="text-[10px] font-bold text-orange-400 uppercase tracking-widest flex items-center gap-1">
+                      From {loc.name}
+                      <ArrowRightLeft size={10} />
+                      {otherLoc?.name || 'Other House'}
+                    </p>
                   </div>
-                  <div className="overflow-hidden">
-                    <p className="font-bold text-sm truncate">{item.name}</p>
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{item.category}</p>
+                  <div className="space-y-2">
+                    {locMovingItems.map((item) => (
+                      <div key={item.id} className="bg-white p-3 rounded-2xl shadow-sm flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 overflow-hidden">
+                          <div className="w-10 h-10 rounded-xl bg-gray-50 flex overflow-hidden flex-shrink-0">
+                            {item.image ? (
+                              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-xl">
+                                {CATEGORIES.find(c => c.value === item.category)?.icon}
+                              </div>
+                            )}
+                          </div>
+                          <div className="overflow-hidden">
+                            <p className="font-bold text-sm truncate">{item.name}</p>
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                              {item.category} • {item.quantity || 1} qty
+                            </p>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => onCompleteMove(item)}
+                          className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center border border-orange-200"
+                        >
+                          <Check size={20} />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <button 
-                  onClick={() => onCompleteMove(item)}
-                  className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center border border-orange-200"
-                >
-                  <Check size={20} />
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
