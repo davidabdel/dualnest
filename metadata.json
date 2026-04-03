@@ -1,0 +1,5 @@
+{
+  "name": "DualNest",
+  "description": "A mobile-first inventory tracker for managing items across two homes with AI-powered item recognition and expiry tracking.",
+  "requestFramePermissions": ["camera"]
+}

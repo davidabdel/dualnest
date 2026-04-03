@@ -1,0 +1,12 @@
+name = "dualnest-api"
+main = "worker.ts"
+compatibility_date = "2024-03-20"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dualnest"
+database_id = "4e61d3ee-d785-4900-8edd-4ddab541bd82"
+
+[vars]
+JWT_SECRET = "dualnest-secret-key"
+NODE_ENV = "production"
