@@ -10,6 +10,7 @@ export function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -17,6 +18,29 @@ export function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+
+    if (!isLogin) {
+      if (password !== confirmPassword) {
+        setError('Passwords do not match');
+        setIsLoading(false);
+        return;
+      }
+      if (password.length < 8) {
+        setError('Password must be at least 8 characters');
+        setIsLoading(false);
+        return;
+      }
+      if (!/\d/.test(password)) {
+        setError('Password must contain at least one number');
+        setIsLoading(false);
+        return;
+      }
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        setError('Password must contain at least one special character');
+        setIsLoading(false);
+        return;
+      }
+    }
 
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/signup';
@@ -103,6 +127,20 @@ export function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
               placeholder="••••••••"
             />
           </div>
+
+          {!isLogin && (
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Confirm Password</label>
+              <input 
+                type="password" 
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full bg-white border border-gray-100 p-4 rounded-2xl font-medium focus:outline-none focus:ring-2 focus:ring-black/5"
+                placeholder="••••••••"
+              />
+            </div>
+          )}
 
           <button 
             type="submit"
