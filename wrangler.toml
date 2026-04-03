@@ -10,3 +10,6 @@ database_id = "4e61d3ee-d785-4900-8edd-4ddab541bd82"
 [vars]
 JWT_SECRET = "dualnest-secret-key"
 NODE_ENV = "production"
+
+[assets]
+directory = "dist"

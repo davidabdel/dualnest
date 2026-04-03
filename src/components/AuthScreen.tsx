@@ -26,7 +26,13 @@ export function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      let data;
+      const text = await response.text();
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(`Server returned ${response.status}: ${text.substring(0, 30)}...`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Something went wrong');
@@ -59,8 +65,8 @@ export function AuthScreen({ onAuthSuccess }: AuthScreenProps) {
         className="w-full max-w-sm space-y-8 relative z-10 bg-white/90 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl border border-white/20"
       >
         <div className="text-center space-y-2">
-          <div className="w-20 h-20 bg-black rounded-[2rem] mx-auto flex items-center justify-center shadow-xl mb-6">
-            <span className="text-white text-3xl font-bold">DN</span>
+          <div className="w-20 h-20 bg-black rounded-[2rem] mx-auto flex items-center justify-center shadow-xl mb-6 overflow-hidden">
+            <img src="/favicon.jpg" alt="DualNest Logo" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-3xl font-bold tracking-tight">DualNest</h1>
           <p className="text-gray-500">Your homes, synchronized.</p>
